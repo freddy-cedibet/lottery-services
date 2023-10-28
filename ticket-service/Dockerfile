@@ -8,13 +8,14 @@ WORKDIR /usr/src/app
 # package.json AND package-lock.json
 COPY package*.json ./
 
-COPY server.js ./
 
 # Install any needed packages including PM2 globally
 RUN npm install && npm install pm2 -g
 
 # Bundle app source inside the Docker image
 COPY . .
+
+COPY server.js ./
 
 # Your app binds to port 3000 so you'll use the EXPOSE instruction to have it mapped by the docker daemon
 EXPOSE 6001
