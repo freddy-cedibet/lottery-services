@@ -28,4 +28,5 @@ HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
   CMD node healthcheck.js
 
 # Start your app using PM2
-CMD ["pm2-runtime", "start", "server.js"]
+#CMD ["pm2-runtime", "start", "server.js"]
+CMD ["npm", "start"]
