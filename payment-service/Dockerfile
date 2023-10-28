@@ -15,7 +15,7 @@ RUN npm install && npm install pm2 -g
 COPY . .
 
 # Your app binds to port 3000 so you'll use the EXPOSE instruction to have it mapped by the docker daemon
-EXPOSE 3000
+EXPOSE 4001
 
 # Use a non-root user for security
 USER node
@@ -25,4 +25,4 @@ HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
   CMD node healthcheck.js
 
 # Start your app using PM2
-CMD ["pm2-runtime", "start", "app.js"]
+CMD ["pm2-runtime", "start", "server.js"]

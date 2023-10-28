@@ -15,7 +15,7 @@ RUN npm install && npm install pm2 -g
 COPY . .
 
 # Your app binds to port 3000 so you'll use the EXPOSE instruction to have it mapped by the docker daemon
-EXPOSE 3000
+EXPOSE 3001
 
 # Use a non-root user for security
 USER node

@@ -15,7 +15,7 @@ RUN npm install && npm install pm2 -g
 COPY . .
 
 # Your gateway app binds to ports 8080 (http) and 9876 (admin) so you'll use the EXPOSE instruction to have them mapped by the docker daemon
-EXPOSE 8080 9876
+EXPOSE 8081 9876
 
 # Use a non-root user for security
 USER node
