@@ -6,11 +6,11 @@ services:
     ports:
       - "8081:8081" # Exposed port for http
       - "9876:9876" # Exposed port for admin
-    depends_on:
-      - ussd-service
-      - payment-service
-      - notification-service
-      - ticket-service
+#    depends_on:
+#      - ussd-service
+#      - payment-service
+#      - notification-service
+#      - ticket-service
 
   ussd-service:
     image: freddy008/ussd-service:latest # Replace with your actual user service Docker image
