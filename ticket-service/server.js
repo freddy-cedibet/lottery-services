@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const port = 3000;
+const port = 6000;
 
 app.get('/users/:id', (req, res) => {
   // logic to handle fetching a user
