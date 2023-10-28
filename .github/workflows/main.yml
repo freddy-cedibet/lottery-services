@@ -37,4 +37,3 @@ jobs:
           file: ./${{ matrix.service }}/Dockerfile
           push: true
           tags: freddy008/${{ matrix.service }}:latest
-          no-cache: true
