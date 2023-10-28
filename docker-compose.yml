@@ -13,7 +13,7 @@ services:
       - ticket-service
 
   ussd-service:
-    image: user_service_image # Replace with your actual user service Docker image
+    image: ussd_service_image # Replace with your actual user service Docker image
     ports:
       - "3000:3000"
 
