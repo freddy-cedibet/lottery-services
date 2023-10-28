@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  gateway:
+    image: your_gateway_service_image # Replace with your actual gateway service Docker image
+    ports:
+      - "8080:8080" # Exposed port for http
+      - "9876:9876" # Exposed port for admin
+    depends_on:
+      - user-service
+      - payment-service
+      - notification-service
+      - ticket-service
+
+  user-service:
+    image: user_service_image # Replace with your actual user service Docker image
+    ports:
+      - "3000:3000"
+
+  payment-service:
+    image: payment_service_image # Replace with your payment service Docker image
+    ports:
+      - "4000:4000"
+
+  notification-service:
+    image: notification_service_image # Replace with your notification service Docker image
+    ports:
+      - "5000:5000"
+
+  ticket-service:
+    image: ticket_service_image # Replace with your ticket service Docker image
+    ports:
+      - "6000:6000"
