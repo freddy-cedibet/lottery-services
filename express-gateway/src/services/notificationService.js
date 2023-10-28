@@ -5,6 +5,8 @@ const sendEmailNotification = (emailDetails) => {
 
 const sendSMSNotification = (smsDetails) => {
     // logic to send SMS notification
+    //another logic
+    //more logic
 };
 
 module.exports = { sendEmailNotification, sendSMSNotification };
