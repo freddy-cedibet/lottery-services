@@ -1,0 +1,69 @@
+http:
+  port: 8080
+admin:
+  port: 9876
+  hostname: localhost
+apiEndpoints:
+  userService:
+    host: '*'
+    paths: '/users/*'
+  paymentService:
+    host: '*'
+    paths: '/payments/*'
+  notificationService:
+    host: '*'
+    paths: '/notifications/*'
+  ticketService:
+    host: '*'
+    paths: '/tickets/*'
+serviceEndpoints:
+  userService:
+    url: 'http://user-service:3000'
+  paymentService:
+    url: 'http://payment-service:4000'
+  notificationService:
+    url: 'http://notification-service:5000'
+  ticketService:
+    url: 'http://ticket-service:6000'
+policies:
+  - proxy
+  - log
+  - rate-limit:
+          - action:
+              max: 10 # maximum number of requests
+              windowMs: 60000 # in 1 minute (60000 milliseconds)
+              statusCode: 429 # status code to return for rate limit exceeded
+              message: "Too many requests, please try again later."
+pipelines:
+  users:
+    apiEndpoints:
+      - userService
+    policies:
+      - proxy:
+          - action:
+              serviceEndpoint: userService 
+              changeOrigin: true
+  payments:
+    apiEndpoints:
+      - paymentService
+    policies:
+      - proxy:
+          - action:
+              serviceEndpoint: paymentService 
+              changeOrigin: true
+  notifications:
+    apiEndpoints:
+      - notificationService
+    policies:
+      - proxy:
+          - action:
+              serviceEndpoint: notificationService 
+              changeOrigin: true
+  tickets:
+    apiEndpoints:
+      - ticketService
+    policies:
+      - proxy:
+          - action:
+              serviceEndpoint: ticketService 
+              changeOrigin: true
