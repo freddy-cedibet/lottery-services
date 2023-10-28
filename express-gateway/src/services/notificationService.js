@@ -8,6 +8,7 @@ const sendSMSNotification = (smsDetails) => {
     //another logic
     //more logic
     //more logic
+    //more logic
 };
 
 module.exports = { sendEmailNotification, sendSMSNotification };
