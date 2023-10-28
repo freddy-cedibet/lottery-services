@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        service: [gateway, ussd-service, payment-service, notification-service, ticket-service]
+        service: [express-gateway, ussd-service, payment-service, notification-service, ticket-service]
     steps:
       - name: Check out repository
         uses: actions/checkout@v2
