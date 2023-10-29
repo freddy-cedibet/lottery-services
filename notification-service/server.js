@@ -1,23 +1,39 @@
 const express = require('express');
+const Consul = require('consul');
+
 const app = express();
 const port = 5005;
-
-app.get('/users/:id', (req, res) => {
-  // logic to handle fetching a user
+const consul = new Consul({
+  host: 'consul', // Consul service name in docker-compose
+  port: 8500
 });
+const serviceName = 'notification-service'; // Name of your service
 
-app.post('/users', (req, res) => {
-  // logic to handle creating a user
-});
-
-app.put('/users/:id', (req, res) => {
-  // logic to handle updating a user
-});
-
-app.delete('/users/:id', (req, res) => {
-  // logic to handle deleting a user
+app.get('/health', (req, res) => {
+  res.status(200).send('OK');
 });
 
 app.listen(port, () => {
-  console.log(`User service listening at http://localhost:${port}`);
+  console.log(`${serviceName} service listening at http://localhost:${port}`);
+
+  // Register with Consul
+  consul.agent.service.register({
+    name: serviceName,
+    address: serviceName, // Use Docker service name as address
+    port: port,
+    check: {
+      http: `http://${serviceName}:${port}/health`,
+      interval: '10s'
+    }
+  }, (err) => {
+    if (err) throw err;
+  });
+});
+
+// Optional: Deregister on app termination
+process.on('SIGINT', () => {
+  consul.agent.service.deregister(serviceName, (err) => {
+    if (err) console.error(err);
+    process.exit();
+  });
 });

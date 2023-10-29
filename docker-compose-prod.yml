@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  gateway:
+    image: freddy008/express-gateway # Replace with your actual gateway service Docker image
+    ports:
+      - "8081:8081" # Exposed port for http
+      - "9876:9876" # Exposed port for admin
+    depends_on:
+      - ussd-service
+      - payment-service
+      - notification-service
+      - ticket-service
+
+  ussd-service:
+    image: freddy008/ussd-service:latest # Replace with your actual user service Docker image
+    ports:
+      - "3001:3001"
+
+  payment-service:
+    image: freddy008/payment-service # Replace with your payment service Docker image
+    ports:
+      - "4001:4001"
+
+  notification-service:
+    image: freddy008/notification-service # Replace with your notification service Docker image
+    ports:
+      - "5005:5005"
+
+  ticket-service:
+    image: freddy008/ticket-service # Replace with your ticket service Docker image
+    ports:
+      - "6000:6000"

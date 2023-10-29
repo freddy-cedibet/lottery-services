@@ -1,30 +1,41 @@
-# Use an official Node runtime as a parent image
-FROM node:16
+# Stage 1: Building the code
+FROM node:16 AS builder
 
-# Create app directory
 WORKDIR /usr/src/app
 
-# Install app dependencies by copying
-# package.json AND package-lock.json
+# Copy package.json and package-lock.json
 COPY package*.json ./
 
-COPY server.js ./
+# Install dependencies including 'typescript' and 'tsc'
+RUN npm install
 
-# Install any needed packages including PM2 globally
-RUN npm install && npm install pm2 -g
-
-# Bundle app source inside the Docker image
+# Copy the rest of the code
 COPY . .
 
-# Your gateway app binds to ports 8080 (http) and 9876 (admin) so you'll use the EXPOSE instruction to have them mapped by the docker daemon
+# Compile TypeScript to JavaScript
+RUN npm run build
+
+# Stage 2: Setup the production environment
+FROM node:16
+
+WORKDIR /usr/src/app
+
+# Copy the build from the previous stage
+COPY --from=builder /usr/src/app/dist ./dist
+COPY --from=builder /usr/src/app/node_modules ./node_modules
+
+# Install PM2 globally for process management
+RUN npm install pm2 -g
+
+# Your app binds to port 8081 for http and 9876 for admin
 EXPOSE 8081 9876
 
-# Use a non-root user for security
+# Run as non-root user
 USER node
 
-# Health check
+# Health check script
 HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
-  CMD node healthcheck.js
+  CMD ["node", "dist/healthcheck.js"]
 
-# Start your app using PM2
-CMD ["pm2-runtime", "start", "server.js"]
+# Start the app
+CMD ["pm2-runtime", "start", "dist/server.js"]
