@@ -24,18 +24,22 @@ WORKDIR /usr/src/app
 COPY --from=builder /usr/src/app/dist ./dist
 COPY --from=builder /usr/src/app/node_modules ./node_modules
 
+# Create logs directory and set appropriate permissions
+RUN mkdir -p /usr/src/app/logs && chown node:node /usr/src/app/logs
+
 # Install PM2 globally for process management
 RUN npm install pm2 -g
 
-# Your app binds to port 8081 for http and 9876 for admin
+# Expose ports
 EXPOSE 8081 9876
 
 # Run as non-root user
 USER node
 
-# Health check script
+# Health check
 HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
   CMD ["node", "dist/healthcheck.js"]
 
 # Start the app
 CMD ["pm2-runtime", "start", "dist/server.js"]
+
