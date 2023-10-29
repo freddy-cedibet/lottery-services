@@ -13,11 +13,15 @@ import * as httpProxy from "http-proxy"
 
 const port = 8081
 const serviceName = 'gateway'
-const consul = new Consul({
-  host: 'consul', // Consul service name in Docker Compose
-  port: "8500"
-})
+// const consul = new Consul({
+//   host: 'consul', // Consul service name in Docker Compose
+//   port: "8500"
+// })
 
+const consul = new Consul({
+  host: 'consul-service.ho880tt4f7098.eu-central-1.cs.amazonlightsail.com', // Update with actual host
+  port: '8500' // Update with actual port if different
+});
 
 const initializeExpress = (): void => {
   const app = express();
@@ -46,31 +50,36 @@ const initializeExpress = (): void => {
     console.log(`Server listening on ${port}`)
     // Register with Consul
 
-    consul.agent.service.register({
-      name: serviceName,
-      address: serviceName, // Use Docker service name as address
-      port,
-      check: {
-        http: `http://${serviceName}:${port}/health`,
-        interval: '10s'
-      }
-    }, (err) => {
-      if (err) {
-        logger.error('Error registering service with Consul', err);
-        // throw err;
-      }
-    });
+    app.get("/health", (req, res) => {
+      res.status(200).send("OK")
+    })
+
+    // consul.agent.service.register({
+    //   name: serviceName,
+    //   address: serviceName, // Use Docker service name as address
+    //   port,
+    //   check: {
+    //     http: `http://${serviceName}:${port}/health`,
+    //     interval: '10s'
+    //   }
+    // }, (err) => {
+    //   if (err) {
+    //     logger.error('Error registering service with Consul', err);
+    //     // throw err;
+    //   }
+    // });
+
   })
 
-  process.on('SIGINT', () => {
-    consul.agent.service.deregister(serviceName, (err) => {
-      if (err) {
-        logger.error('Error deregistering service with Consul', err);
-        console.error(err);
-      }
-      process.exit();
-    });
-  });
+  // process.on('SIGINT', () => {
+  //   consul.agent.service.deregister(serviceName, (err) => {
+  //     if (err) {
+  //       logger.error('Error deregistering service with Consul', err);
+  //       console.error(err);
+  //     }
+  //     process.exit();
+  //   });
+  // });
 
 }
 
