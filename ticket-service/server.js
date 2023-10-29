@@ -27,7 +27,7 @@ app.listen(port, () => {
       interval: '10s'
     }
   }, (err) => {
-    if (err) throw err;
+    // if (err) throw err;
   });
 });
 
