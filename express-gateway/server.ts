@@ -8,20 +8,14 @@ import * as Consul from 'consul';
 import * as morgan from 'morgan';
 import * as winston from 'winston';
 import  logger from "./src/utils/logger"
-import {RoundRobinBalancer} from "./src/load-balancing/strategies/RoundRobinBalancer";
-import * as httpProxy from "http-proxy"
 
 const port = 8081
 const serviceName = 'gateway'
-// const consul = new Consul({
-//   host: 'consul', // Consul service name in Docker Compose
-//   port: "8500"
-// })
 
 const consul = new Consul({
-  host: 'consul-service.ho880tt4f7098.eu-central-1.cs.amazonlightsail.com', // Update with actual host
-  port: '8500' // Update with actual port if different
-});
+  host: 'consul', // Consul service name in Docker Compose
+  port: "8500"
+})
 
 const initializeExpress = (): void => {
   const app = express();
@@ -33,8 +27,6 @@ const initializeExpress = (): void => {
       logger.info(message.trim());
     },
   };
-
-
 
   app.set('view engine', 'ejs');
   app.use(express.static(path.join(__dirname, 'public')));
