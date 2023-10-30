@@ -16,18 +16,22 @@ app.get('/health', (req, res) => {
 app.listen(port, () => {
   console.log(`${serviceName} service listening at http://localhost:${port}`);
 
+  app.get("/health", (req, res) => {
+    res.status(200).send("OK")
+  })
+
   // Register with Consul
-  consul.agent.service.register({
-    name: serviceName,
-    address: serviceName, // Use Docker service name as address
-    port: port,
-    check: {
-      http: `http://${serviceName}:${port}/health`,
-      interval: '10s'
-    }
-  }, (err) => {
-    // if (err) throw err;
-  });
+//   consul.agent.service.register({
+//     name: serviceName,
+//     address: serviceName, // Use Docker service name as address
+//     port: port,
+//     check: {
+//       http: `http://${serviceName}:${port}/health`,
+//       interval: '10s'
+//     }
+//   }, (err) => {
+//     // if (err) throw err;
+//   });
 });
 
 // Optional: Deregister on app termination

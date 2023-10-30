@@ -54,32 +54,31 @@ const initializeExpress = (): void => {
       res.status(200).send("OK")
     })
 
-    // consul.agent.service.register({
-    //   name: serviceName,
-    //   address: serviceName, // Use Docker service name as address
-    //   port,
-    //   check: {
-    //     http: `http://${serviceName}:${port}/health`,
-    //     interval: '10s'
-    //   }
-    // }, (err) => {
-    //   if (err) {
-    //     logger.error('Error registering service with Consul', err);
-    //     // throw err;
-    //   }
-    // });
+    consul.agent.service.register({
+      name: serviceName,
+      address: serviceName, // Use Docker service name as address
+      port,
+      check: {
+        http: `http://${serviceName}:${port}/health`,
+        interval: '10s'
+      }
+    }, (err) => {
+      if (err) {
+        logger.error('Error registering service with Consul', err);
+        // throw err;
+      }
+    });
 
   })
 
   // process.on('SIGINT', () => {
-  //   consul.agent.service.deregister(serviceName, (err) => {
-  //     if (err) {
-  //       logger.error('Error deregistering service with Consul', err);
-  //       console.error(err);
-  //     }
-  //     process.exit();
-  //   });
-  // });
+    consul.agent.service.deregister(serviceName, (err) => {
+      if (err) {
+        logger.error('Error deregistering service with Consul', err);
+        console.error(err);
+      }
+      process.exit();
+    });
 
 }
 
