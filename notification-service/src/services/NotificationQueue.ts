@@ -1,31 +1,33 @@
+import * as Queue from 'bull';
 import { Notification } from '../models/Notification';
+import * as  NotificationService from './NotificationService';
 
 class NotificationQueue {
-    private queue: Notification[];
+    private queue: Queue.Queue<Notification>;
 
     constructor() {
-        this.queue = [];
+        this.queue = new Queue('notification-queue', {
+            redis: {
+                host: 'localhost',
+                port: 6379
+            }
+        });
+
+        this.queue.process(async (job, done) => {
+            try {
+                console.log('Processing notification:', job.data);
+                await NotificationService.sendNotification(job.data);
+                done();
+            } catch (error) {
+                console.error('Failed to process notification:', error);
+                done(error);
+            }
+        });
     }
 
-    // Enqueue a notification
-    enqueue(notification: Notification): void {
-        this.queue.push(notification);
+    async enqueue(notification: Notification): Promise<void> {
+        await this.queue.add(notification);
         console.log('Notification enqueued:', notification);
-    }
-
-    // Process the next notification in the queue
-    processNext(): void {
-        if (this.queue.length === 0) {
-            console.log('No notifications to process.');
-            return;
-        }
-
-        const nextNotification = this.queue.shift(); // Remove the first item from the queue
-        if (nextNotification) {
-            // Process the notification (example: log it)
-            console.log('Processing notification:', nextNotification);
-            // Add real processing logic here (e.g., sending via email/SMS)
-        }
     }
 }
 

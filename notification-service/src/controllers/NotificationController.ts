@@ -5,7 +5,6 @@ import NotificationQueue from "../services/NotificationQueue";
 export const request =
     catchErrors(async (req, res) => {
         const notificationQueue = new NotificationQueue();
-        // const paymentResponse = await paymentService.run()
         const newNotification : Notification = {
             content: {
                 title: "",
