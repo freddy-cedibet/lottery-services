@@ -1,9 +1,20 @@
 import NpontuSMSProvider from "../integrations/interfaces/sms/NpontuSMSProvider";
-import SMSAdapter from "../integrations/interfaces/sms/SMSAdapter";
+import Notification, {NotificationType} from "../models/Notification";
 
+class NotificationService {
+    private smsProvider: NpontuSMSProvider;
 
-export const sendSms = async() => {
-    const npontuProvider = new NpontuSMSProvider();
-    const smsAdapter = new SMSAdapter(npontuProvider);
-    await smsAdapter.sendSMS('233242953672', 'Hello from Notification service!');
+    constructor(smsProvider: NpontuSMSProvider) {
+        this.smsProvider = smsProvider;
+    }
+
+    async sendNotification(notification: Notification) {
+        switch (notification.type) {
+            case NotificationType.SMS:
+                await this.smsProvider.sendSMS(notification.recipient, notification.content.body);
+                // Update notification status as needed
+                break;
+            // other cases (e.g., EMAIL, PUSH)...
+        }
+    }
 }

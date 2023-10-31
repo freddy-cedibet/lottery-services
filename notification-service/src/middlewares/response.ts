@@ -5,4 +5,4 @@ export const addRespondToResponse: RequestHandler = (_req, res, next) => {
     res.status(200).send(data);
   };
   next();
-}
+};
