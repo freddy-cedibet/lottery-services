@@ -1,11 +1,11 @@
-import NpontuSMSProvider from "../integrations/interfaces/sms/NpontuSMSProvider";
 import Notification, {NotificationType} from "../models/Notification";
+import SMSProvider from "../integrations/interfaces/sms/SMSProvider";
 
-class NotificationService {
-    private smsProvider: NpontuSMSProvider;
+export class NotificationService {
+    private smsProvider: SMSProvider;
 
-    constructor(smsProvider: NpontuSMSProvider) {
-        this.smsProvider = smsProvider;
+    constructor() {
+        this.smsProvider = new SMSProvider();
     }
 
     async sendNotification(notification: Notification) {

@@ -7,6 +7,7 @@ import * as path from "path";
 import * as Consul from 'consul';
 import * as morgan from 'morgan';
 import {logger} from "@sentry/utils";
+import {attachPublicRoutes} from "./src/routes";
 // import * as winston from 'winston';
 // import  logger from "./src/utils/logger"
 
@@ -17,6 +18,9 @@ const serviceName = 'notification-service'
 //   host: 'consul',
 //   port: "8500"
 // })
+
+require('dotenv').config();
+
 
 const initializeExpress = (): void => {
   const app = express();
@@ -38,6 +42,9 @@ const initializeExpress = (): void => {
   app.use(morgan('combined', { stream: morganStream }));
 
   app.use(handleError)
+
+  attachPublicRoutes(app)
+
 
   app.listen( port,() => {
     console.log(`Server listening on ${port}`)

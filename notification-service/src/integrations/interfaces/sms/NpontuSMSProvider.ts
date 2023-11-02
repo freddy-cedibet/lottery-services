@@ -11,6 +11,7 @@ class NpontuSMSProvider implements ISMSProvider {
         this.baseUrl = process.env.DEYWURO_SMS_BASE_URL || '';
         this.username = process.env.DEYWURO_SMS_USERNAME || '';
         this.password = process.env.DEYWURO_SMS_PASSWORD || '';
+        console.log("DEY WURO SMS", this.baseUrl)
 
         if (!this.baseUrl || !this.username || !this.password) {
             throw new Error("SMS provider configuration is missing.");
